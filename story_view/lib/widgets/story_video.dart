@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:video_player/video_player.dart';
-import '../utils.dart';
+
 import '../controller/story_controller.dart';
+import '../utils.dart';
 
 class VideoLoader {
   String url;
@@ -31,7 +33,7 @@ class VideoLoader {
         if (videoFile == null) {
           state = LoadState.success;
           videoFile = fileResponse.file;
-          onComplete();
+          onComplete.call();
         }
       }
     });
@@ -63,10 +65,7 @@ class StoryVideo extends StatefulWidget {
 }
 
 class StoryVideoState extends State<StoryVideo> {
-  Future<void>? playerLoader;
-
   StreamSubscription? _streamSubscription;
-
   VideoPlayerController? playerController;
 
   @override
@@ -136,7 +135,7 @@ class StoryVideoState extends State<StoryVideo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      color: Colors.white,
       height: double.infinity,
       width: double.infinity,
       child: getContentView(),
@@ -148,5 +147,106 @@ class StoryVideoState extends State<StoryVideo> {
     playerController?.dispose();
     _streamSubscription?.cancel();
     super.dispose();
+  }
+}
+
+class StoryVideo1 extends StatefulWidget {
+  const StoryVideo1({
+    Key? key,
+    required this.url,
+    required this.storyController,
+  }) : super(key: key);
+
+  final String url;
+  final StoryController storyController;
+
+  @override
+  State<StoryVideo1> createState() => _StoryVideo1State();
+}
+
+class _StoryVideo1State extends State<StoryVideo1> {
+  late final VideoPlayerController? _playerController;
+  // ignore: unused_field
+  late final StreamSubscription? _streamSubscription;
+
+  @override
+  void initState() {
+    widget.storyController.pause();
+
+    _playerController = VideoPlayerController.network(widget.url);
+
+    _playerController!.initialize().then((v) {
+      setState(() {});
+      widget.storyController.play();
+    });
+
+    _streamSubscription =
+        widget.storyController.playbackNotifier.listen((playbackState) {
+      if (playbackState == PlaybackState.pause) {
+        _playerController!.pause();
+      } else {
+        _playerController!.play();
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _playerController?.dispose();
+    _streamSubscription?.cancel();
+    widget.storyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void setState(event) {
+    if (mounted) {
+      super.setState(event);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      height: double.infinity,
+      width: double.infinity,
+      child: _getContentView(),
+    );
+  }
+
+  Widget _getContentView() {
+    if (_playerController!.value.isInitialized) {
+      return Center(
+        child: AspectRatio(
+          aspectRatio: _playerController!.value.aspectRatio,
+          child: VideoPlayer(_playerController!),
+        ),
+      );
+    }
+
+    return _playerController!.value.isBuffering
+        ? const Center(
+            child: SizedBox(
+              width: 70,
+              height: 70,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                strokeWidth: 3,
+              ),
+            ),
+          )
+        : _playerController!.value.hasError
+            ? const Center(
+                child: Text(
+                  "Media failed to load.",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : const SizedBox();
   }
 }

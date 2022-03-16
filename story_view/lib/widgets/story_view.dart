@@ -233,10 +233,9 @@ class StoryItem {
           color: Colors.black,
           child: Stack(
             children: <Widget>[
-              StoryVideo.url(
-                url,
-                controller: controller,
-                requestHeaders: requestHeaders,
+              StoryVideo1(
+                url: url,
+                storyController: controller,
               ),
               SafeArea(
                 child: Align(
@@ -280,7 +279,7 @@ class StoryItem {
     return StoryItem(
         Container(
           key: key,
-          color: Colors.black,
+          color: Colors.white,
           child: Stack(
             children: <Widget>[
               Center(
