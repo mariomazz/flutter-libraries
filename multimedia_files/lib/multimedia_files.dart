@@ -18,11 +18,7 @@ class ExtendedMethodsMultimedia {
           final pathFile = (await VideoThumbnail.thumbnailFile(
             video: path,
             thumbnailPath: (await getTemporaryDirectory()).path,
-            imageFormat: path.contains('.jpg') || path.contains('.JPG')
-                ? ImageFormat.JPEG
-                : path.contains('.png') || path.contains('.PNG')
-                    ? ImageFormat.PNG
-                    : ImageFormat.JPEG,
+            imageFormat: ImageFormat.JPEG,
             maxHeight: 64,
             quality: 100,
           ));
@@ -34,14 +30,15 @@ class ExtendedMethodsMultimedia {
 
         case UrlType.image:
           return await dominantColorFromImageProvider(
-              imageProvider: NetworkImage(path));
+            imageProvider: NetworkImage(path),
+          );
 
         default:
           return Colors.white;
       }
     } catch (e) {
       if (kDebugMode) {
-        print('backgroundColorFromUrl => $e');
+        print('dominantColorFromUrl => $e');
       }
       return Colors.white;
     }
