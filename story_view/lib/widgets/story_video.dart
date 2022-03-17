@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:multimedia_files/enums/enums.dart';
+import 'package:multimedia_files/multimedia_files.dart';
 import 'package:video_player/video_player.dart';
-
 import '../controller/story_controller.dart';
 import '../utils.dart';
 
@@ -208,11 +208,30 @@ class _StoryVideo1State extends State<StoryVideo1> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      height: double.infinity,
-      width: double.infinity,
-      child: _getContentView(),
+    return SizedBox.expand(
+      child: FutureBuilder<Color>(
+        future: ExtendedMethodsMultimedia.dominantColorFromUrl(
+          path: widget.url,
+          urlType: UrlType.video,
+        ),
+        builder: (context, snapshot) {
+          final color = snapshot.data ?? Colors.white;
+          return Container(
+            decoration: BoxDecoration(
+              color: color,
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  color.withOpacity(0.2),
+                  color.withOpacity(0.7),
+                ],
+              ),
+            ),
+            child: _getContentView(),
+          );
+        },
+      ),
     );
   }
 
