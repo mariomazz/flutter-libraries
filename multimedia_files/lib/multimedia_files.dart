@@ -18,9 +18,9 @@ class ExtendedMethodsMultimedia {
           final pathFile = (await VideoThumbnail.thumbnailFile(
             video: path,
             thumbnailPath: (await getTemporaryDirectory()).path,
-            imageFormat: ImageFormat.JPEG,
+            imageFormat: ImageFormat.PNG,
             maxHeight: 64,
-            quality: 100,
+            quality: 50,
           ));
           pathFile == null ? throw Exception('thumbnail image error') : null;
 
@@ -51,7 +51,7 @@ class ExtendedMethodsMultimedia {
       final pathFile = (await VideoThumbnail.thumbnailFile(
         video: videoUrl,
         thumbnailPath: (await getTemporaryDirectory()).path,
-        imageFormat: ImageFormat.JPEG,
+        imageFormat: ImageFormat.PNG,
         maxHeight: 64,
         quality: 100,
       ));
