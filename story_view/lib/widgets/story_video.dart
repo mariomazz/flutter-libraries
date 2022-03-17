@@ -188,7 +188,7 @@ class _StoryVideo1State extends State<StoryVideo1> {
         _playerController!.play();
       }
     });
-
+    setState(() {});
     super.initState();
   }
 
@@ -196,7 +196,6 @@ class _StoryVideo1State extends State<StoryVideo1> {
   void dispose() {
     _playerController?.dispose();
     _streamSubscription?.cancel();
-    widget.storyController.dispose();
     super.dispose();
   }
 
