@@ -51,6 +51,8 @@ class StoryItem {
   static StoryItem text({
     required String title,
     required Color backgroundColor,
+    required String description,
+    required Future<void> Function() titleClickEvent,
     Key? key,
     TextStyle? textStyle,
     bool shown = false,
@@ -82,23 +84,64 @@ class StoryItem {
           horizontal: 24,
           vertical: 16,
         ),
+        /*  child: Center(
+          child: TextButton(
+            onPressed: () async {
+              await titleClickEvent.call();
+            },
+            child: Text(
+              title,
+              style: textStyle?.copyWith(
+                    color: contrast > 1.8 ? Colors.white : Colors.black,
+                  ) ??
+                  TextStyle(
+                    color: contrast > 1.8 ? Colors.white : Colors.black,
+                    fontSize: 18,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ), */
         child: Center(
-          child: Text(
-            title,
-            style: textStyle?.copyWith(
-                  color: contrast > 1.8 ? Colors.white : Colors.black,
-                ) ??
-                TextStyle(
-                  color: contrast > 1.8 ? Colors.white : Colors.black,
-                  fontSize: 18,
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  await titleClickEvent.call();
+                },
+                child: Text(
+                  title,
+                  style: textStyle?.copyWith(
+                        color: contrast > 1.8 ? Colors.white : Colors.black,
+                      ) ??
+                      TextStyle(
+                        color: contrast > 1.8 ? Colors.white : Colors.black,
+                        fontSize: 18,
+                      ),
+                  textAlign: TextAlign.center,
                 ),
-            textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                description,
+                style: textStyle?.copyWith(
+                      color: contrast > 1.8 ? Colors.white : Colors.black,
+                    ) ??
+                    TextStyle(
+                      color: contrast > 1.8 ? Colors.white : Colors.black,
+                      fontSize: 18,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
-        //color: backgroundColor,
+        color: backgroundColor,
       ),
       shown: shown,
-      duration: duration ?? const Duration(seconds: 3),
+      duration: duration ?? const Duration(seconds: 5),
     );
   }
 
@@ -109,7 +152,8 @@ class StoryItem {
     required StoryController controller,
     Key? key,
     BoxFit imageFit = BoxFit.fitWidth,
-    String? caption,
+    String? title,
+    String? description,
     bool shown = false,
     Map<String, dynamic>? requestHeaders,
     Duration? duration,
@@ -138,10 +182,11 @@ class StoryItem {
                     horizontal: 24,
                     vertical: 8,
                   ),
-                  color: caption != null ? Colors.black54 : Colors.transparent,
-                  child: caption != null
+                  color:
+                      description != null ? Colors.black54 : Colors.transparent,
+                  child: description != null
                       ? Text(
-                          caption,
+                          description,
                           style: const TextStyle(
                             fontSize: 15,
                             color: Colors.white,
@@ -223,7 +268,8 @@ class StoryItem {
     Key? key,
     Duration? duration,
     BoxFit imageFit = BoxFit.fitWidth,
-    String? caption,
+    String? title,
+    String? description,
     bool shown = false,
     Map<String, dynamic>? requestHeaders,
   }) {
@@ -242,7 +288,7 @@ class StoryItem {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: caption != null
+                    color: description != null
                         ? Colors.black54.withOpacity(0.5)
                         : Colors.transparent,
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -251,9 +297,9 @@ class StoryItem {
                   margin: const EdgeInsets.only(bottom: 24),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                  child: caption != null
+                  child: description != null
                       ? Text(
-                          caption,
+                          description,
                           style: const TextStyle(
                             fontSize: 15,
                             color: Colors.white,
