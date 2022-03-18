@@ -104,6 +104,7 @@ class StoryItem {
         ), */
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
                 onPressed: () async {
