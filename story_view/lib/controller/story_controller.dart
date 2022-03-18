@@ -1,4 +1,3 @@
-
 import 'package:rxdart/rxdart.dart';
 
 enum PlaybackState { pause, play, next, previous }
@@ -29,6 +28,10 @@ class StoryController {
   void previous() {
     playbackNotifier.add(PlaybackState.previous);
   }
+
+  /* void setDuration({required Duration duration}) {
+    playbackNotifier.add(duration);
+  } */
 
   /// Remember to call dispose when the story screen is disposed to close
   /// the notifier stream.

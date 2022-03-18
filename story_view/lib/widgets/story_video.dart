@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:multimedia_files/enums/enums.dart';
@@ -175,6 +176,14 @@ class _StoryVideo1State extends State<StoryVideo1> {
 
     _playerController = VideoPlayerController.network(widget.url);
 
+    if (kDebugMode) {
+      print(_playerController?.value.duration ?? 'duration null');
+    }
+
+    /* widget.storyController.setDuration(
+        duration:
+            _playerController?.value.duration ?? const Duration(seconds: 10)); */
+
     _playerController!.initialize().then((v) {
       setState(() {});
       widget.storyController.play();
@@ -216,6 +225,23 @@ class _StoryVideo1State extends State<StoryVideo1> {
         ),
         builder: (context, snapshot) {
           final color = snapshot.data ?? Colors.white;
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Container(
+              decoration: BoxDecoration(
+                color: color,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    color.withOpacity(0.8),
+                    color.withOpacity(0.2),
+                  ],
+                ),
+              ),
+              child: _getContentView(),
+            );
+          }
           return Container(
             decoration: BoxDecoration(
               color: color,
@@ -228,7 +254,6 @@ class _StoryVideo1State extends State<StoryVideo1> {
                 ],
               ),
             ),
-            child: _getContentView(),
           );
         },
       ),
@@ -253,13 +278,9 @@ class _StoryVideo1State extends State<StoryVideo1> {
 
     return _playerController!.value.isBuffering
         ? const Center(
-            child: SizedBox(
-              width: 70,
-              height: 70,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                strokeWidth: 3,
-              ),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              strokeWidth: 3,
             ),
           )
         : _playerController!.value.hasError
@@ -273,4 +294,9 @@ class _StoryVideo1State extends State<StoryVideo1> {
               )
             : const SizedBox();
   }
+
+  /*  Widget _progressIndicator(){
+
+  } */
+
 }
