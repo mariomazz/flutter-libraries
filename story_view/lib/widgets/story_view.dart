@@ -228,41 +228,48 @@ class StoryItem {
     Map<String, dynamic>? requestHeaders,
   }) {
     return StoryItem(
-        Container(
-          key: key,
-          color: Colors.black,
-          child: Stack(
-            children: <Widget>[
-              StoryVideo1(
-                url: url,
-                storyController: controller,
-              ),
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.only(bottom: 24),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                    color:
-                        caption != null ? Colors.black54 : Colors.transparent,
-                    child: caption != null
-                        ? Text(
-                            caption,
-                            style: const TextStyle(
-                                fontSize: 15, color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )
-                        : const SizedBox(),
+      Container(
+        key: key,
+        color: Colors.black,
+        child: Stack(
+          children: <Widget>[
+            StoryVideo1(
+              url: url,
+              storyController: controller,
+            ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: caption != null
+                        ? Colors.black54.withOpacity(0.5)
+                        : Colors.transparent,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 24),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  child: caption != null
+                      ? Text(
+                          caption,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : const SizedBox(),
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
-        shown: shown,
-        duration: duration ?? const Duration(seconds: 10));
+      ),
+      shown: shown,
+      duration: duration ?? const Duration(seconds: 10),
+    );
   }
 
   /// Shorthand for creating a story item from an image provider such as `AssetImage`
