@@ -107,9 +107,7 @@ class StoryItem {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () async {
-                  await titleClickEvent.call();
-                },
+                onPressed: titleClickEvent,
                 child: Text(
                   title,
                   style: textStyle?.copyWith(
@@ -139,7 +137,7 @@ class StoryItem {
             ],
           ),
         ),
-       // color: backgroundColor,
+        // color: backgroundColor,
       ),
       shown: shown,
       duration: duration ?? const Duration(seconds: 5),
