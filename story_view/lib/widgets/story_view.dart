@@ -208,7 +208,8 @@ class StoryItem {
   /// one passed to the `StoryView`
   factory StoryItem.inlineImage({
     required String url,
-    Text? caption,
+    Text? title,
+    String? description,
     required StoryController controller,
     Key? key,
     BoxFit imageFit = BoxFit.cover,
@@ -239,9 +240,30 @@ class StoryItem {
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: SizedBox(
-                      child: caption ?? const SizedBox(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: description != null
+                            ? Colors.black54.withOpacity(0.5)
+                            : Colors.transparent,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
                       width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 24),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
+                      child: description != null
+                          ? Text(
+                              description,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          : const SizedBox(),
                     ),
                   ),
                 ),
