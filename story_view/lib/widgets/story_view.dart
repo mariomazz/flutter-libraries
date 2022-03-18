@@ -84,8 +84,35 @@ class StoryItem {
           horizontal: 24,
           vertical: 16,
         ),
-        /*  child: Center(
-          child: TextButton(
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black54.withOpacity(0.5),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 8,
+                ),
+                child: Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          /* child: TextButton(
             onPressed: () async {
               await titleClickEvent.call();
             },
@@ -100,9 +127,9 @@ class StoryItem {
                   ),
               textAlign: TextAlign.center,
             ),
-          ),
-        ), */
-        child: Center(
+          ), */
+        ),
+        /*   child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -136,7 +163,7 @@ class StoryItem {
               ),
             ],
           ),
-        ),
+        ), */
         // color: backgroundColor,
       ),
       shown: shown,
