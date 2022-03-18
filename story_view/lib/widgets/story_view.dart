@@ -52,7 +52,7 @@ class StoryItem {
     required String title,
     required Color backgroundColor,
     required String description,
-    required Future<void> Function() titleClickEvent,
+    //required Future<void> Function() titleClickEvent,
     Key? key,
     TextStyle? textStyle,
     bool shown = false,
