@@ -238,9 +238,17 @@ class _StoryVideo1State extends State<StoryVideo1> {
   Widget _getContentView() {
     if (_playerController!.value.isInitialized) {
       return Center(
-        child: AspectRatio(
-          aspectRatio: _playerController!.value.aspectRatio,
-          child: VideoPlayer(_playerController!),
+        child: Container(
+          margin: const EdgeInsets.all(
+            10,
+          ),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: AspectRatio(
+            aspectRatio: _playerController!.value.aspectRatio,
+            child: VideoPlayer(_playerController!),
+          ),
         ),
       );
     }
