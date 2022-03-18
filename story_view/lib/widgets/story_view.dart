@@ -106,8 +106,8 @@ class StoryItem {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButton(
-                onPressed: titleClickEvent,
+              GestureDetector(
+                onTap: () => titleClickEvent.call(),
                 child: Text(
                   title,
                   style: textStyle?.copyWith(
