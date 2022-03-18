@@ -239,15 +239,13 @@ class _StoryVideo1State extends State<StoryVideo1> {
     if (_playerController!.value.isInitialized) {
       return Center(
         child: Container(
-          margin: const EdgeInsets.all(
-            10,
-          ),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          child: AspectRatio(
-            aspectRatio: _playerController!.value.aspectRatio,
-            child: VideoPlayer(_playerController!),
+          margin: const EdgeInsets.all(15),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AspectRatio(
+              aspectRatio: _playerController!.value.aspectRatio,
+              child: VideoPlayer(_playerController!),
+            ),
           ),
         ),
       );
