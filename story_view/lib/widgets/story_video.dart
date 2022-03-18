@@ -220,11 +220,11 @@ class _StoryVideo1State extends State<StoryVideo1> {
             decoration: BoxDecoration(
               color: color,
               gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
                 colors: [
                   color.withOpacity(0.2),
-                  color.withOpacity(0.7),
+                  color.withOpacity(0.8),
                 ],
               ),
             ),
