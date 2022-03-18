@@ -138,7 +138,7 @@ class StoryItem {
             ],
           ),
         ),
-        color: backgroundColor,
+       // color: backgroundColor,
       ),
       shown: shown,
       duration: duration ?? const Duration(seconds: 5),
