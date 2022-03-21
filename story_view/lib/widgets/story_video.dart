@@ -184,7 +184,7 @@ class _StoryVideo1State extends State<StoryVideo1> {
         duration:
             _playerController?.value.duration ?? const Duration(seconds: 10)); */
 
-    _playerController!.initialize().then((v) {
+    _playerController?.initialize().then((v) {
       setState(() {});
       widget.storyController.play();
     });
@@ -197,7 +197,7 @@ class _StoryVideo1State extends State<StoryVideo1> {
         _playerController!.play();
       }
     });
-    setState(() {});
+    /*  setState(() {}); */
     super.initState();
   }
 

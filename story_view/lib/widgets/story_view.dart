@@ -60,7 +60,7 @@ class StoryItem {
     bool roundedBottom = false,
     Duration? duration,
   }) {
-    double contrast = ContrastHelper.contrast([
+    /*   final double contrast = ContrastHelper.contrast([
       backgroundColor.red,
       backgroundColor.green,
       backgroundColor.blue,
@@ -68,7 +68,7 @@ class StoryItem {
       255,
       255,
       255
-    ] /** white text */);
+    ] /** white text */); */
 
     return StoryItem(
       Container(
