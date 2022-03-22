@@ -22,9 +22,12 @@ class ExtendedMethodsMultimedia {
             maxHeight: 64,
             quality: 50,
           ));
-          pathFile == null ? throw Exception('thumbnail image error') : null;
 
-          return dominantColorFromImageProvider(
+          if (pathFile == null) {
+            throw Exception('thumbnail image error');
+          }
+
+          return await dominantColorFromImageProvider(
             imageProvider: AssetImage(pathFile),
           );
 
