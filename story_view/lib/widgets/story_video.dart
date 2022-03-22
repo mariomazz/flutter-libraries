@@ -185,10 +185,6 @@ class _StoryVideo1State extends State<StoryVideo1> {
         if (_playerController!.value.isInitialized) {
           widget.storyController.play();
           setState(() {});
-        } else {
-         /*  while (!(_playerController!.value.isInitialized)) {
-
-          } */
         }
       }
     });
