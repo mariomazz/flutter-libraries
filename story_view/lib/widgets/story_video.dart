@@ -170,9 +170,31 @@ class _StoryVideo1State extends State<StoryVideo1> {
   // ignore: unused_field
   late final StreamSubscription? _streamSubscription;
 
+  // ignore: unused_field
+  late Color? _dominantColor;
+
+  void _playStory() {
+    if (_playerController != null) {
+      if (_playerController!.value.isInitialized && _dominantColor != null) {
+        widget.storyController.play();
+        setState(() {});
+      }
+    }
+  }
+
   @override
   void initState() {
     widget.storyController.pause();
+
+    ExtendedMethodsMultimedia.dominantColorFromUrl(
+      path: widget.url,
+      urlType: UrlType.video,
+    ).then((value) {
+      setState(() {
+        _dominantColor = value;
+      });
+      _playStory();
+    });
 
     _playerController = VideoPlayerController.network(widget.url);
 
@@ -181,22 +203,8 @@ class _StoryVideo1State extends State<StoryVideo1> {
     }
 
     _playerController?.initialize().then((v) {
-      if (_playerController != null) {
-        if (_playerController!.value.isInitialized) {
-          widget.storyController.play();
-          setState(() {});
-        }
-      }
+      _playStory();
     });
-
-/*     _playerController?.addListener(() {
-      if (_playerController != null) {
-        if (_playerController!.value.isInitialized) {
-          widget.storyController.play();
-          setState(() {});
-        }
-      }
-    }); */
 
     _streamSubscription =
         widget.storyController.playbackNotifier.listen((playbackState) {
@@ -206,7 +214,7 @@ class _StoryVideo1State extends State<StoryVideo1> {
         _playerController?.play();
       }
     });
-    /*  setState(() {}); */
+
     super.initState();
   }
 
@@ -227,55 +235,44 @@ class _StoryVideo1State extends State<StoryVideo1> {
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-      child: FutureBuilder<Color>(
-        future: ExtendedMethodsMultimedia.dominantColorFromUrl(
-          path: widget.url,
-          urlType: UrlType.video,
-        ),
-        builder: (context, snapshot) {
-          final color = snapshot.data ?? Colors.white;
-
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Container(
+      child: _dominantColor != null
+          ? Container(
               decoration: BoxDecoration(
-                color: color,
+                color: _dominantColor,
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    color.withOpacity(0.8),
-                    color.withOpacity(0.2),
+                    _dominantColor!.withOpacity(0.8),
+                    _dominantColor!.withOpacity(0.2),
                   ],
                 ),
               ),
               child: _getContentView(),
-            );
-          }
-          return Container(
-            decoration: BoxDecoration(
-              color: color,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  color.withOpacity(0.8),
-                  color.withOpacity(0.2),
-                ],
+            )
+          : Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withOpacity(0.8),
+                    Colors.white.withOpacity(0.2),
+                  ],
+                ),
               ),
-            ),
-            child: const Center(
-              child: SizedBox(
-                width: 70,
-                height: 70,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  strokeWidth: 3,
+              child: const Center(
+                child: SizedBox(
+                  width: 70,
+                  height: 70,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    strokeWidth: 3,
+                  ),
                 ),
               ),
             ),
-          );
-        },
-      ),
     );
   }
 
