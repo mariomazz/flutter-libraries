@@ -20,7 +20,7 @@ class ExtendedMethodsMultimedia {
             thumbnailPath: (await getTemporaryDirectory()).path,
             imageFormat: ImageFormat.PNG,
             maxHeight: 64,
-            quality: 50,
+            quality: 100,
           ));
 
           if (pathFile == null) {
