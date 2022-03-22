@@ -167,11 +167,9 @@ class StoryVideo1 extends StatefulWidget {
 
 class _StoryVideo1State extends State<StoryVideo1> {
   late final VideoPlayerController? _playerController;
-  // ignore: unused_field
   late final StreamSubscription? _streamSubscription;
 
-  // ignore: unused_field
-  late Color? _dominantColor;
+  Color? _dominantColor;
 
   void _playStory() {
     if (_playerController != null) {
