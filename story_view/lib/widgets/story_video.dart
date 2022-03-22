@@ -185,16 +185,17 @@ class _StoryVideo1State extends State<StoryVideo1> {
             _playerController?.value.duration ?? const Duration(seconds: 10)); */
 
     _playerController?.initialize().then((v) {
-      setState(() {});
       widget.storyController.play();
+      
+      setState(() {});
     });
 
     _streamSubscription =
         widget.storyController.playbackNotifier.listen((playbackState) {
       if (playbackState == PlaybackState.pause) {
-        _playerController!.pause();
+        _playerController?.pause();
       } else {
-        _playerController!.play();
+        _playerController?.play();
       }
     });
     /*  setState(() {}); */
