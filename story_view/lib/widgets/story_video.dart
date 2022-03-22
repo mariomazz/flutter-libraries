@@ -180,16 +180,27 @@ class _StoryVideo1State extends State<StoryVideo1> {
       print(_playerController?.value.duration ?? 'duration null');
     }
 
-    _playerController?.initialize().then((v) {});
+    _playerController?.initialize().then((v) {
+      if (_playerController != null) {
+        if (_playerController!.value.isInitialized) {
+          widget.storyController.play();
+          setState(() {});
+        } else {
+         /*  while (!(_playerController!.value.isInitialized)) {
 
-    _playerController?.addListener(() {
+          } */
+        }
+      }
+    });
+
+/*     _playerController?.addListener(() {
       if (_playerController != null) {
         if (_playerController!.value.isInitialized) {
           widget.storyController.play();
           setState(() {});
         }
       }
-    });
+    }); */
 
     _streamSubscription =
         widget.storyController.playbackNotifier.listen((playbackState) {
