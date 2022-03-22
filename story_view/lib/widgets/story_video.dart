@@ -184,10 +184,16 @@ class _StoryVideo1State extends State<StoryVideo1> {
         duration:
             _playerController?.value.duration ?? const Duration(seconds: 10)); */
 
-    _playerController?.initialize().then((v) {
-      widget.storyController.play();
-      
-      setState(() {});
+    _playerController?.initialize().then((v) async {
+      await Future.delayed(
+        const Duration(
+          milliseconds: 500,
+        ),
+        () {
+          widget.storyController.play();
+          setState(() {});
+        },
+      );
     });
 
     _streamSubscription =
