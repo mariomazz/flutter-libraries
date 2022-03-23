@@ -196,6 +196,9 @@ class _StoryVideo1State extends State<StoryVideo1> {
 
     _playerController = VideoPlayerController.network(widget.url);
 
+
+   // _playerController.value.duration
+
     if (kDebugMode) {
       print(_playerController?.value.duration ?? 'duration null');
     }

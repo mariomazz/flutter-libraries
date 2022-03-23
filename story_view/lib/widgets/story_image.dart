@@ -194,13 +194,26 @@ class StoryImageState extends State<StoryImage> {
           ),
         );
       default:
-        return const Center(
-          child: SizedBox(
-            width: 70,
-            height: 70,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              strokeWidth: 3,
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white.withOpacity(0.8),
+                Colors.white.withOpacity(0.2),
+              ],
+            ),
+          ),
+          child: const Center(
+            child: SizedBox(
+              width: 70,
+              height: 70,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                strokeWidth: 3,
+              ),
             ),
           ),
         );
