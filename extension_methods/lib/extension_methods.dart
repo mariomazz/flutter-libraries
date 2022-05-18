@@ -24,5 +24,5 @@ extension ExString on String {
 
 extension ExList<T> on List<T> {
   T randomItem() => this[Random().nextInt(length)];
-  List<T> shuffle() => this..shuffle();
+  List<T> afterShuffle() => this..shuffle();
 }
