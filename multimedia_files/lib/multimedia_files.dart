@@ -28,12 +28,12 @@ class ExtendedMethodsMultimedia {
             throw Exception('thumbnail image error');
           }
 
-          return await dominantColorFromImageProvider(
+          return await dominantColorFromImage(
             imageProvider: FileImage(File(pathFile)),
           );
 
         case UrlType.image:
-          return await dominantColorFromImageProvider(
+          return await dominantColorFromImage(
             imageProvider: NetworkImage(path),
           );
 
@@ -48,19 +48,19 @@ class ExtendedMethodsMultimedia {
     }
   }
 
-  static Future<Image?> thumbnailFromVideoUrl({
+  static Future<String?> thumbnailFromVideoUrl({
     required String videoUrl,
   }) async {
     try {
-      final pathFile = (await VideoThumbnail.thumbnailFile(
+      return (await VideoThumbnail.thumbnailFile(
         video: videoUrl,
         thumbnailPath: (await getTemporaryDirectory()).path,
         imageFormat: ImageFormat.PNG,
         maxHeight: 64,
         quality: 100,
       ));
-      pathFile == null ? throw Exception('thumbnail image error') : null;
-      return Image.asset(pathFile);
+      /* pathFile == null ? throw Exception('thumbnail image error') : null;
+      return Image.asset(pathFile); */
     } catch (e) {
       if (kDebugMode) {
         print('thumbnailFromVideoUrl => $e');
@@ -69,7 +69,7 @@ class ExtendedMethodsMultimedia {
     }
   }
 
-  static Future<Color> dominantColorFromImageProvider(
+  static Future<Color> dominantColorFromImage(
       {required ImageProvider imageProvider}) async {
     return (await PaletteGenerator.fromImageProvider(imageProvider))
             .dominantColor
