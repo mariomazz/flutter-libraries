@@ -2,7 +2,7 @@ library widgets;
 
 import 'package:flutter/material.dart';
 
-class ResolveSnapshot<E> extends StatelessWidget {
+class ResolveSnapshot<T> extends StatelessWidget {
   const ResolveSnapshot({
     Key? key,
     required this.snapshot,
@@ -10,15 +10,15 @@ class ResolveSnapshot<E> extends StatelessWidget {
     this.loading,
     required this.onData,
   }) : super(key: key);
-  final AsyncSnapshot<E> snapshot;
+  final AsyncSnapshot<T> snapshot;
   final Widget? onError;
   final Widget? loading;
-  final Widget Function(E) onData;
+  final Widget Function(T) onData;
 
   @override
   Widget build(BuildContext context) {
     if (snapshot.hasData && snapshot.data != null) {
-      return onData.call(snapshot.data as E);
+      return onData.call(snapshot.data as T);
     }
 
     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -28,7 +28,7 @@ class ResolveSnapshot<E> extends StatelessWidget {
       if (snapshot.hasError) {
         return onError ?? viewError(snapshot.error);
       } else if (snapshot.hasData && snapshot.data != null) {
-        return onData.call(snapshot.data as E);
+        return onData.call(snapshot.data as T);
       } else {
         return viewError('Empty data');
       }
