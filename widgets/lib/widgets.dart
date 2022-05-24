@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 class ResolveSnapshot<T> extends StatelessWidget {
   const ResolveSnapshot({
     Key? key,
-    required this.context,
     required this.snapshot,
     this.onError,
     this.loading,
     required this.onData,
   }) : super(key: key);
-  final BuildContext context;
   final AsyncSnapshot<T> snapshot;
   final Widget? onError;
   final Widget? loading;
