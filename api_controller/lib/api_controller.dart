@@ -24,30 +24,10 @@ class ApiControllerW<T> extends StatelessWidget {
       builder: (context, snapshot) {
         return ResolveSnapshot<T>(
           snapshot: snapshot,
-          onData: (data) {
-            return onData.call(data);
-          },
+          onError: onError,
+          loading: loading,
+          onData: onData,
         );
-
-        /* if (snapshot.hasData) {
-          return onData.call(snapshot.data);
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return loading ?? const Center(child: CircularProgressIndicator());
-        } else if (snapshot.connectionState == ConnectionState.active ||
-            snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return onError ??
-                Center(child: Text('Error => ${snapshot.error?.toString()}'));
-          } else if (snapshot.hasData) {
-            return onData.call(snapshot.data);
-          } else {
-            return const Center(child: Text('Empty data'));
-          }
-        } else {
-          return Center(child: Text('State: ${snapshot.connectionState}'));
-        } */
       },
     );
   }
