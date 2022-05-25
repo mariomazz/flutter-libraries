@@ -1,6 +1,7 @@
 library api_controller;
 
 import 'package:flutter/material.dart';
+import 'package:widgets/widgets.dart';
 
 class ApiControllerW<T> extends StatelessWidget {
   const ApiControllerW({
@@ -14,14 +15,21 @@ class ApiControllerW<T> extends StatelessWidget {
   final Stream<T> stream;
   final Widget? onError;
   final Widget? loading;
-  final Widget Function(T?) onData;
+  final Widget Function(T) onData;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<T>(
       stream: stream,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        return ResolveSnapshot<T>(
+          snapshot: snapshot,
+          onData: (data) {
+            return onData.call(data);
+          },
+        );
+
+        /* if (snapshot.hasData) {
           return onData.call(snapshot.data);
         }
 
@@ -39,7 +47,7 @@ class ApiControllerW<T> extends StatelessWidget {
           }
         } else {
           return Center(child: Text('State: ${snapshot.connectionState}'));
-        }
+        } */
       },
     );
   }

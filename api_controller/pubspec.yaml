@@ -2,6 +2,7 @@ name: api_controller
 description: A new Flutter package project.
 version: 0.0.1
 homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -10,11 +11,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  widgets: 
+    git: 
+      url: https://github.com/mariomazz/flutter-libraries.git
+      ref: develop
+      path: widgets
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
