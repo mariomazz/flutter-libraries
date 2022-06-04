@@ -39,7 +39,7 @@ class Routing {
   late final Widget Function(String page) _builder;
 
   List<String> _initializePages(List<String> pages) {
-    return pages;
+    return pages.toSet().toList();
   }
 
   // end init
