@@ -30,10 +30,10 @@ class ResolveSnapshot<T> extends StatelessWidget {
       } else if (snapshot.hasData && snapshot.data != null) {
         return onData.call(snapshot.data as T);
       } else {
-        return viewError('Empty data');
+        return onError ?? viewError('Empty data');
       }
     } else {
-      return viewError(snapshot.connectionState);
+      return onError ?? viewError(snapshot.connectionState);
     }
   }
 
