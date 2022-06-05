@@ -39,7 +39,7 @@ class Routing {
   late final Widget Function(String page) _builder;
 
   List<String> _initializePages(List<String> pages) {
-    return pages.toSet().toList();
+    return pages.toSet().toList().where((e) => e.contains("/")).toList();
   }
 
   // end init
