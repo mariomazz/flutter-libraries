@@ -29,7 +29,7 @@ class Routing {
     if (_instance != null) {
       return _instance!;
     }
-    throw Exception("init not found");
+    throw Exception("routing is not initialized");
   }
 
   late final List<String> _pages;
