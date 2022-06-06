@@ -39,7 +39,7 @@ class Routing {
   late final Widget Function(String page) _builder;
 
   List<String> _initializePages(List<String> pages) {
-    return pages.toSet().toList().where((e) => e.contains("/")).toList();
+    return pages.where((e) => e.contains("/")).toSet().toList();
   }
 
   // end init
@@ -49,16 +49,12 @@ class Routing {
 
   // save browsing data
 
-  Object? getExtra(String page) => _instance?._searchData(page)[page];
+  Object? getExtra(String page) => _stackObj[page];
 
   final Map<String, Object?> _stackObj = {};
 
   void _pushObj(Object? obj, String path) =>
       obj != null ? _stackObj.addAll({path: obj}) : () {};
-
-  Map<String, Object?> _searchData(String page) =>
-      (Map<String, Object?>.from(_stackObj)
-        ..removeWhere((k, v) => (k != page)));
 
   // end save browsing data
 
