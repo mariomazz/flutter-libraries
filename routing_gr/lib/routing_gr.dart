@@ -38,8 +38,13 @@ class Routing {
 
   late final Widget Function(String page) _builder;
 
+  static const _initialRoute = "/";
+
   List<String> _initializePages(List<String> pages) {
-    return pages.where((e) => e.contains("/")).toSet().toList();
+    return pages
+        .where((e) => e.contains(_initialRoute) && e != _initialRoute)
+        .toSet()
+        .toList();
   }
 
   // end init
@@ -79,7 +84,7 @@ class Routing {
       return _builder(state.location);
     },
     redirect: (state) {
-      if (state.location == "/") {
+      if (state.location == _initialRoute) {
         return _initialPage;
       }
       return null;
