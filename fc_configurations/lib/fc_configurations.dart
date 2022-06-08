@@ -20,10 +20,6 @@ class FcService {
 
       final envConfig = envRef.docs.first.data();
 
-      if (kDebugMode) {
-        print(envConfig);
-      }
-
       return envConfig ?? {};
     } catch (e) {
       if (kDebugMode) {
