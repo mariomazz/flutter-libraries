@@ -1,26 +1,24 @@
 library fc_configurations;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class FcService {
-  static Future<Map<String, dynamic>> getAppEnvironment(
-      dynamic firestoreInstance,
+  static Future<Map<String, String>> getEnvironment(
+      FirebaseFirestore firestoreInstance,
       {String? env}) async {
     try {
-      const defaultEnv = "dev";
+      env ??= const String.fromEnvironment('ENVIRONMENT', defaultValue: "dev")
+          .toLowerCase();
 
-      env ??=
-          const String.fromEnvironment('ENVIRONMENT', defaultValue: defaultEnv)
-              .toLowerCase();
-
-      final envRef = await firestoreInstance
-          .collection('app_env')
-          .where("env_name", isEqualTo: env.toLowerCase())
-          .get();
-
-      final envConfig = envRef.docs.first.data();
-
-      return envConfig ?? {};
+      return (await firestoreInstance
+              .collection('app_env')
+              .where("env_name", isEqualTo: env.toLowerCase())
+              .get())
+          .docs
+          .first
+          .data()
+          .map((key, value) => MapEntry(key, value.toString()));
     } catch (e) {
       if (kDebugMode) {
         print("Exception getAppEnvironment => $e");
