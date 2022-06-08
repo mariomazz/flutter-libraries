@@ -13,7 +13,7 @@ class FcService {
           const String.fromEnvironment('ENVIRONMENT', defaultValue: defaultEnv)
               .toLowerCase();
 
-      final envRef = await firestoreInstance.instance
+      final envRef = await firestoreInstance
           .collection('app_env')
           .where("env_name", isEqualTo: env.toLowerCase())
           .get();
