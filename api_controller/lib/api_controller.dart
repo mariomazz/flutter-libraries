@@ -1,7 +1,7 @@
 library api_controller;
 
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
+import 'package:widgets/resolve_snapshot.dart';
 
 class ApiControllerW<T> extends StatelessWidget {
   const ApiControllerW({
