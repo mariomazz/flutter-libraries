@@ -1,6 +1,7 @@
 library connectivity_service;
 
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -20,7 +21,7 @@ class ConnectivityService {
 
   // end singleton
 
-  final Connectivity _connectivity = Connectivity();
+  static final Connectivity _connectivity = Connectivity();
 
   final StreamController<ConnectivityResultCS> _streamController =
       BehaviorSubject<ConnectivityResultCS>();
@@ -28,12 +29,13 @@ class ConnectivityService {
   Stream<ConnectivityResultCS> get stream => _streamController.stream;
 
   void _init() {
-    _connectivity.onConnectivityChanged.listen((value) {
-      _streamController.add(_from(value));
+    _connectivity.onConnectivityChanged.listen((value) async {
+      await checkConnectivity().then((value) {
+        _streamController.add(value);
+      });
     });
-
-    _connectivity.checkConnectivity().then((value) {
-      _streamController.add(_from(value));
+    checkConnectivity().then((value) {
+      _streamController.add(value);
     });
   }
 
@@ -41,7 +43,7 @@ class ConnectivityService {
     _streamController.close();
   }
 
-  ConnectivityResultCS _from(ConnectivityResult result) {
+  static ConnectivityResultCS _from(ConnectivityResult result) {
     switch (result) {
       case ConnectivityResult.bluetooth:
         return ConnectivityResultCS.bluetooth;
@@ -53,6 +55,22 @@ class ConnectivityService {
         return ConnectivityResultCS.mobile;
       default:
         return ConnectivityResultCS.none;
+    }
+  }
+
+  static Future<ConnectivityResultCS> checkConnectivity() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return await _connectivity
+            .checkConnectivity()
+            .then<ConnectivityResultCS>((value) {
+          return _from(value);
+        });
+      }
+      throw Exception();
+    } on SocketException catch (_) {
+      return ConnectivityResultCS.none;
     }
   }
 }
