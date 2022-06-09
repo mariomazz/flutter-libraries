@@ -18,7 +18,7 @@ class FcService {
           .docs
           .first
           .data()
-          .map((key, value) => MapEntry(key, value.toString()));
+          .map((key, value) => MapEntry(key.toLowerCase(), value.toString()));
     } catch (e) {
       if (kDebugMode) {
         print("Exception getAppEnvironment => $e");

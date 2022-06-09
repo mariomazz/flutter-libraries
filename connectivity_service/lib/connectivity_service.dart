@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ConnectivityService {
+  
   // singleton
 
   ConnectivityService._instance() {
