@@ -28,13 +28,13 @@ class ConnectivityService {
 
   Stream<ConnectivityResultCS> get stream => _streamController.stream;
 
-  void _init() {
+  void _init() async {
     _connectivity.onConnectivityChanged.listen((value) async {
       await checkConnectivity().then((value) {
         _streamController.add(value);
       });
     });
-    checkConnectivity().then((value) {
+    await checkConnectivity().then((value) {
       _streamController.add(value);
     });
   }
