@@ -40,7 +40,7 @@ class ConnectivityService {
     });
   }
 
-  void disose() {
+  void dispose() {
     _streamController.close();
   }
 

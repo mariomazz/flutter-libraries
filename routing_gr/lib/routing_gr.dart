@@ -1,5 +1,6 @@
 library routing_gr;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -84,14 +85,21 @@ class Routing {
       return _builder(state.location);
     },
     redirect: (state) {
+      if (kDebugMode) {
+        print("GoRouterBuild");
+      }
       if (state.location == _initialRoute) {
         return _initialPage;
       }
       return null;
     },
     navigatorBuilder: (context, state, widget) {
+      if (kDebugMode) {
+        print("GoRouterBuild");
+      }
       return widget;
     },
+    refreshListenable: _listenable,
   );
 
   // end GoRouter
@@ -108,5 +116,18 @@ class Routing {
 
   static void roSetPathUrlStrategy() {
     setPathUrlStrategy();
+  }
+
+  // listenable class
+
+  final _listenable = Listenable();
+  void refresh() {
+    return _listenable.notify();
+  }
+}
+
+class Listenable with ChangeNotifier {
+  void notify() {
+    return notifyListeners();
   }
 }
