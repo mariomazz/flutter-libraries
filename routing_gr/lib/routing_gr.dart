@@ -1,6 +1,6 @@
 library routing_gr;
 
-import 'package:flutter/foundation.dart';
+import 'package:connectivity_service/connectivity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -13,14 +13,22 @@ class Routing {
     required List<String> pages,
     required Widget Function(String page) builder,
     bool setPathUrlStrategy = false,
+    bool connectivityManagement = false,
+    Widget withoutConnection = const WithoutConnection(),
   }) {
     _instance = this;
     _initialPage = initialPage;
     _builder = builder;
     _pages = _initializePages(pages);
+    _connectivityManagement = connectivityManagement;
+    _withoutConnection = withoutConnection;
 
     if (setPathUrlStrategy) {
       roSetPathUrlStrategy();
+    }
+
+    if (_connectivityManagement) {
+      _initConnectivityService();
     }
   }
 
@@ -31,6 +39,17 @@ class Routing {
       return _instance!;
     }
     throw Exception("routing is not initialized");
+  }
+
+  void _initConnectivityService() {
+    _connectivity.stream.listen((event) {
+      if (event == ConnectivityResultCS.none) {
+        _internetAvailable = false;
+      } else {
+        _internetAvailable = true;
+      }
+      refresh();
+    });
   }
 
   late final List<String> _pages;
@@ -85,17 +104,14 @@ class Routing {
       return _builder(state.location);
     },
     redirect: (state) {
-      if (kDebugMode) {
-        print("GoRouterBuild");
-      }
       if (state.location == _initialRoute) {
         return _initialPage;
       }
       return null;
     },
     navigatorBuilder: (context, state, widget) {
-      if (kDebugMode) {
-        print("GoRouterBuild");
+      if (_connectivityManagement && _internetAvailable == false) {
+        return _withoutConnection;
       }
       return widget;
     },
@@ -118,11 +134,39 @@ class Routing {
     setPathUrlStrategy();
   }
 
-  // listenable class
+  // routing refresh
 
   final _listenable = Listenable();
   void refresh() {
     return _listenable.notify();
+  }
+
+  // end routing refresh
+
+  // connectivity_service
+
+  final ConnectivityService _connectivity = ConnectivityService();
+
+  bool? _internetAvailable;
+
+  late Widget _withoutConnection;
+
+  late final bool _connectivityManagement;
+
+  // end connectivity_service
+
+}
+
+class WithoutConnection extends StatelessWidget {
+  const WithoutConnection({Key? key}) : super(key: key);
+  final Widget _withoutConnection = const Scaffold(
+    body: Center(
+      child: Text("Non sei connesso alla rete"),
+    ),
+  );
+  @override
+  Widget build(BuildContext context) {
+    return _withoutConnection;
   }
 }
 
