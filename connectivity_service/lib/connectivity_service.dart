@@ -6,7 +6,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ConnectivityService {
-  
   // singleton
 
   ConnectivityService._instance() {
@@ -72,6 +71,8 @@ class ConnectivityService {
       }
       throw Exception();
     } on SocketException catch (_) {
+      return ConnectivityResultCS.none;
+    } catch (e) {
       return ConnectivityResultCS.none;
     }
   }
