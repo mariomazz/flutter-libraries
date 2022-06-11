@@ -119,9 +119,7 @@ class Routing {
         return _withoutConnection;
       }
       if (_authManagement && _isAuth == false) {
-        return Builder(
-          builder: (context) => _withoutAuthentication,
-        );
+        return _withoutAuthentication;
       }
       return widget;
     },
