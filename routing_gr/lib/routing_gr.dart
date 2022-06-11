@@ -123,6 +123,10 @@ class Routing {
       return null;
     },
     navigatorBuilder: (context, state, widget) {
+      print(state.location);
+      /*   if(state.location==_connectivityRoute){
+retu
+      } */
       return widget;
     },
     refreshListenable: _listenable,
@@ -180,7 +184,7 @@ class Routing {
       } else {
         _internetAvailable = true;
       }
-      print("internet available");
+      print("internet available => $_internetAvailable");
       refresh();
     });
   }
@@ -209,7 +213,7 @@ class Routing {
   void _initAuthService() {
     _authentication?.stream.listen((event) {
       _isAuth = event;
-      print("auth service");
+      print("auth service => $_isAuth");
       refresh();
     });
   }
