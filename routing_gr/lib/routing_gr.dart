@@ -116,6 +116,8 @@ class Routing {
         return _connectivityRoute;
       }
       if (_authManagement && _isAuth == false) {
+        print("loginRoute");
+
         return _loginRoute;
       }
       return null;
