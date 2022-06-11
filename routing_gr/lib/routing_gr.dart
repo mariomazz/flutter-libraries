@@ -120,6 +120,9 @@ class Routing {
       }
       return null;
     },
+    navigatorBuilder: (context, state, widget) {
+      return widget;
+    },
     refreshListenable: _listenable,
   );
 
