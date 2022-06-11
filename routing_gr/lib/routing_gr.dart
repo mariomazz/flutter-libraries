@@ -1,5 +1,3 @@
-library routing_gr;
-
 import 'dart:async';
 import 'package:connectivity_service/connectivity_service.dart';
 import 'package:flutter/material.dart';
@@ -10,40 +8,36 @@ class Routing {
   // init
 
   Routing.init({
-    required String initialPage,
-    required List<String> pages,
-    required Widget Function(String page) builder,
-    bool setPathUrlStrategy = false,
-    bool connectivityManagement = false,
-    Widget withoutConnection = const WithoutConnection(),
-    bool authManagement = false,
-    Widget withoutAuthentication = const WithoutAuthentication(),
-    StreamController<bool>? authentication,
+    required RoutingConfigurations configurations,
   }) {
     _instance = this;
-    _initialPage = initialPage;
-    _builder = builder;
-    _pages = _initializePages(pages);
+
+    _configurations = configurations;
+
+    _initialPage = _configurations.initialPage;
+    _builder = _configurations.builder;
+    _pages = _initializePages(_configurations.pages);
+    _errorBuilder = _configurations.errorBuilder;
 
     // connectivity
-    _connectivityManagement = connectivityManagement;
-    _withoutConnection = withoutConnection;
+    _connectivityManagement = _configurations.connectivityManagement;
+    _withoutConnection = _configurations.withoutConnection;
     if (_connectivityManagement) {
       _initConnectivityService();
     }
     // end connectivity
 
     // authentication
-    _authentication = authentication;
-    _authManagement = authManagement;
-    _withoutAuthentication = withoutAuthentication;
+    _authentication = _configurations.authentication;
+    _authManagement = _configurations.authManagement;
+    _withoutAuthentication = _configurations.withoutAuthentication;
     if (_authManagement) {
       _initAuthService();
     }
     // end authentication
 
-    if (setPathUrlStrategy) {
-      roSetPathUrlStrategy();
+    if (_configurations.setPathUrlStrategy) {
+      _roSetPathUrlStrategy();
     }
   }
 
@@ -56,11 +50,15 @@ class Routing {
     throw Exception("routing is not initialized");
   }
 
+  late final RoutingConfigurations _configurations;
+
+  late final Widget _errorBuilder;
+
   late final List<String> _pages;
 
   late final String _initialPage;
 
-  late final Widget Function(String page) _builder;
+  late final Widget? Function(String page) _builder;
 
   static const _initialRoute = "/";
 
@@ -96,7 +94,7 @@ class Routing {
         path: e,
         builder: (context, state) {
           _pushObj(state.extra, e);
-          return _builder(e);
+          return _builder(e) ?? _errorBuilder;
         },
       );
     }).toList();
@@ -104,29 +102,25 @@ class Routing {
 
   late final GoRouter _go = GoRouter(
     initialLocation: _initialPage,
-    routes: [..._buildRoutes(), _connectivityGoRoute, _loginGoRoute],
+    routes: _buildRoutes(),
     errorBuilder: (context, state) {
-      return _builder(state.location);
+      return _errorBuilder;
     },
     redirect: (state) {
       if (state.location == _initialRoute) {
         return _initialPage;
       }
-      if (_connectivityManagement && _internetAvailable == false) {
-        return _connectivityRoute;
-      }
-      if (_authManagement && _isAuth == false) {
-        print("loginRoute");
-
-        return _loginRoute;
-      }
       return null;
     },
     navigatorBuilder: (context, state, widget) {
-      print(state.location);
-      /*   if(state.location==_connectivityRoute){
-retu
-      } */
+      if (notAuth) {
+        return NavigatorCS(child: _withoutAuthentication);
+      }
+
+      if (notConnect) {
+        return NavigatorCS(child: _withoutConnection);
+      }
+
       return widget;
     },
     refreshListenable: _listenable,
@@ -144,30 +138,21 @@ retu
 
   // end navigations
 
-  static void roSetPathUrlStrategy() {
+  static void _roSetPathUrlStrategy() {
     setPathUrlStrategy();
   }
 
   // routing refresh
 
-  final _listenable = Listenable();
+  late final _listenable = Listenable();
 
   void refresh() {
-    return _listenable.notify();
+    _listenable.notify();
   }
 
   // end routing refresh
 
   // connectivity_service
-
-  static const _connectivityRoute = "/connectivityPage";
-
-  late final _connectivityGoRoute = GoRoute(
-    path: _connectivityRoute,
-    builder: (context, state) {
-      return _withoutConnection;
-    },
-  );
 
   final ConnectivityService _connectivity = ConnectivityService();
 
@@ -184,23 +169,17 @@ retu
       } else {
         _internetAvailable = true;
       }
-      print("internet available => $_internetAvailable");
       refresh();
     });
+  }
+
+  bool get notConnect {
+    return (_connectivityManagement && _internetAvailable == false);
   }
 
   // end connectivity_service
 
   // auth service
-
-  static const _loginRoute = "/loginPage";
-
-  late final _loginGoRoute = GoRoute(
-    path: _loginRoute,
-    builder: (context, state) {
-      return _withoutAuthentication;
-    },
-  );
 
   late final StreamController<bool>? _authentication;
 
@@ -213,38 +192,70 @@ retu
   void _initAuthService() {
     _authentication?.stream.listen((event) {
       _isAuth = event;
-      print("auth service => $_isAuth");
       refresh();
     });
+  }
+
+  bool get notAuth {
+    return (_authManagement && _isAuth == false);
   }
 
   // auth service
 
 }
 
-class WithoutConnection extends StatelessWidget {
-  const WithoutConnection({Key? key}) : super(key: key);
-  final Widget _withoutConnection = const Scaffold(
-    body: Center(
-      child: Text("Non sei connesso alla rete"),
-    ),
-  );
+class NavigatorCS extends StatelessWidget {
+  const NavigatorCS({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+  final Widget child;
   @override
   Widget build(BuildContext context) {
-    return _withoutConnection;
+    return Navigator(
+      onPopPage: (_, __) => false,
+      pages: [
+        MaterialPage(
+          child: child,
+        )
+      ],
+    );
+  }
+}
+
+class WithoutConnection extends StatelessWidget {
+  const WithoutConnection({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text("Non sei connesso alla rete"),
+      ),
+    );
   }
 }
 
 class WithoutAuthentication extends StatelessWidget {
   const WithoutAuthentication({Key? key}) : super(key: key);
-  final Widget _withoutAuthentication = const Scaffold(
-    body: Center(
-      child: Text("Non sei autenticato, effettua login"),
-    ),
-  );
   @override
   Widget build(BuildContext context) {
-    return _withoutAuthentication;
+    return const Scaffold(
+      body: Center(
+        child: Text("Non sei autenticato, effettua login"),
+      ),
+    );
+  }
+}
+
+class NotFound extends StatelessWidget {
+  const NotFound({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text("404 NOT FOUND"),
+      ),
+    );
   }
 }
 
@@ -252,4 +263,30 @@ class Listenable with ChangeNotifier {
   void notify() {
     return notifyListeners();
   }
+}
+
+class RoutingConfigurations {
+  final String initialPage;
+  final List<String> pages;
+  Widget? Function(String page) builder;
+  final Widget errorBuilder;
+  final bool setPathUrlStrategy;
+  final bool connectivityManagement;
+  final Widget withoutConnection;
+  final bool authManagement;
+  final Widget withoutAuthentication;
+  final StreamController<bool>? authentication;
+
+  RoutingConfigurations({
+    required this.initialPage,
+    required this.pages,
+    required this.builder,
+    this.errorBuilder = const NotFound(),
+    this.setPathUrlStrategy = false,
+    this.connectivityManagement = false,
+    this.withoutConnection = const WithoutConnection(),
+    this.authManagement = false,
+    this.withoutAuthentication = const WithoutAuthentication(),
+    this.authentication,
+  });
 }
