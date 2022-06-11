@@ -104,7 +104,7 @@ class Routing {
 
   late final GoRouter _go = GoRouter(
     initialLocation: _initialPage,
-    routes: _buildRoutes(),
+    routes: [..._buildRoutes(), _connectivityGoRoute, _loginGoRoute],
     errorBuilder: (context, state) {
       return _builder(state.location);
     },
@@ -112,16 +112,13 @@ class Routing {
       if (state.location == _initialRoute) {
         return _initialPage;
       }
-      return null;
-    },
-    navigatorBuilder: (context, state, widget) {
       if (_connectivityManagement && _internetAvailable == false) {
-        return _withoutConnection;
+        return _connectivityRoute;
       }
       if (_authManagement && _isAuth == false) {
-        return _withoutAuthentication;
+        return _loginRoute;
       }
-      return widget;
+      return null;
     },
     refreshListenable: _listenable,
   );
@@ -154,6 +151,15 @@ class Routing {
 
   // connectivity_service
 
+  static const _connectivityRoute = "/connectivityPage";
+
+  late final _connectivityGoRoute = GoRoute(
+    path: _connectivityRoute,
+    builder: (context, state) {
+      return _withoutConnection;
+    },
+  );
+
   final ConnectivityService _connectivity = ConnectivityService();
 
   bool? _internetAvailable;
@@ -176,6 +182,15 @@ class Routing {
   // end connectivity_service
 
   // auth service
+
+  static const _loginRoute = "/loginPage";
+
+  late final _loginGoRoute = GoRoute(
+    path: _loginRoute,
+    builder: (context, state) {
+      return _withoutAuthentication;
+    },
+  );
 
   late final StreamController<bool>? _authentication;
 
