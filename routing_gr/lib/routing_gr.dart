@@ -40,8 +40,8 @@ class Routing {
     if (_authManagement) {
       _initAuthService();
     }
+    // end authentication
 
-    // authentication
     if (setPathUrlStrategy) {
       roSetPathUrlStrategy();
     }
@@ -74,6 +74,7 @@ class Routing {
   // end init
 
   RouterDelegate<Object> get delegate => _go.routerDelegate;
+
   RouteInformationParser<Object> get parser => _go.routeInformationParser;
 
   // save browsing data
@@ -144,6 +145,7 @@ class Routing {
   // routing refresh
 
   final _listenable = Listenable();
+
   void refresh() {
     return _listenable.notify();
   }
@@ -210,14 +212,14 @@ class WithoutConnection extends StatelessWidget {
 
 class WithoutAuthentication extends StatelessWidget {
   const WithoutAuthentication({Key? key}) : super(key: key);
-  final Widget _withoutConnection = const Scaffold(
+  final Widget _withoutAuthentication = const Scaffold(
     body: Center(
       child: Text("Non sei autenticato, effettua login"),
     ),
   );
   @override
   Widget build(BuildContext context) {
-    return _withoutConnection;
+    return _withoutAuthentication;
   }
 }
 
