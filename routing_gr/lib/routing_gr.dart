@@ -180,6 +180,7 @@ class Routing {
       } else {
         _internetAvailable = true;
       }
+      print("internet available");
       refresh();
     });
   }
@@ -208,7 +209,7 @@ class Routing {
   void _initAuthService() {
     _authentication?.stream.listen((event) {
       _isAuth = event;
-
+      print("auth service");
       refresh();
     });
   }
