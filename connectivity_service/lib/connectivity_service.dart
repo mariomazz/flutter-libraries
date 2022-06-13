@@ -80,14 +80,18 @@ class ConnectivityService {
   }
 
   static Connectivity? _initConnectivity() {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (_checkPlatform()) {
       return Connectivity();
     }
     return null;
   }
 
-  bool _checkPlatform() {
-    return Platform.isAndroid || Platform.isIOS;
+  static bool _checkPlatform() {
+    try {
+      return Platform.isAndroid || Platform.isIOS;
+    } catch (e) {
+      return false;
+    }
   }
 }
 
