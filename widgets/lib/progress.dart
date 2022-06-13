@@ -14,16 +14,22 @@ class ProgressCS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS || Platform.isMacOS) {
-      if (center) {
-        return Center(child: CupertinoActivityIndicator(color: color));
+    try {
+      if (Platform.isIOS || Platform.isMacOS) {
+        if (center) {
+          return Center(child: CupertinoActivityIndicator(color: color));
+        }
+        return CupertinoActivityIndicator(color: color);
       }
-      return CupertinoActivityIndicator(color: color);
-    } else {
+    } catch (e) {
       if (center) {
         return Center(child: CircularProgressIndicator(color: color));
       }
       return CircularProgressIndicator(color: color);
     }
+    if (center) {
+      return Center(child: CircularProgressIndicator(color: color));
+    }
+    return CircularProgressIndicator(color: color);
   }
 }
