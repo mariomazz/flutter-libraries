@@ -21,7 +21,7 @@ class ConnectivityService {
 
   // end singleton
 
-  static final Connectivity _connectivity = Connectivity();
+  static final Connectivity? _connectivity = _initConnectivity();
 
   final StreamController<ConnectivityResultCS> _streamController =
       BehaviorSubject<ConnectivityResultCS>();
@@ -31,7 +31,7 @@ class ConnectivityService {
   void _init() async {
     final platformValid = _checkPlatform();
     if (platformValid) {
-      _connectivity.onConnectivityChanged.listen((value) async {
+      _connectivity?.onConnectivityChanged.listen((value) async {
         await checkConnectivity().then((value) {
           _streamController.add(value);
         });
@@ -68,11 +68,8 @@ class ConnectivityService {
       final result = await InternetAddress.lookup(
           'www.google.com'); // google address for validity issues
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return await _connectivity
-            .checkConnectivity()
-            .then<ConnectivityResultCS>((value) {
-          return _from(value);
-        });
+        return _from((await _connectivity?.checkConnectivity()) ??
+            ConnectivityResult.wifi);
       }
       throw Exception();
     } on SocketException catch (_) {
@@ -80,6 +77,13 @@ class ConnectivityService {
     } catch (e) {
       return ConnectivityResultCS.none;
     }
+  }
+
+  static Connectivity? _initConnectivity() {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return Connectivity();
+    }
+    return null;
   }
 
   bool _checkPlatform() {
