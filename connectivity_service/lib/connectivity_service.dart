@@ -29,14 +29,19 @@ class ConnectivityService {
   Stream<ConnectivityResultCS> get stream => _streamController.stream;
 
   void _init() async {
-    _connectivity.onConnectivityChanged.listen((value) async {
+    final platformValid = _checkPlatform();
+    if (platformValid) {
+      _connectivity.onConnectivityChanged.listen((value) async {
+        await checkConnectivity().then((value) {
+          _streamController.add(value);
+        });
+      });
       await checkConnectivity().then((value) {
         _streamController.add(value);
       });
-    });
-    await checkConnectivity().then((value) {
-      _streamController.add(value);
-    });
+    } else {
+      _streamController.add(ConnectivityResultCS.wifi);
+    }
   }
 
   void dispose() {
@@ -75,6 +80,10 @@ class ConnectivityService {
     } catch (e) {
       return ConnectivityResultCS.none;
     }
+  }
+
+  bool _checkPlatform() {
+    return Platform.isAndroid || Platform.isIOS;
   }
 }
 
