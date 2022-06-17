@@ -1,8 +1,11 @@
 import 'dart:async';
+
 import 'package:connectivity_service/connectivity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:widgets/progress.dart';
+import 'package:widgets/resolve_snapshot.dart';
 
 class Routing {
   // init
@@ -31,9 +34,7 @@ class Routing {
     _authentication = _configurations.authentication;
     _authManagement = _configurations.authManagement;
     _withoutAuthentication = _configurations.withoutAuthentication;
-    if (_authManagement) {
-      _initAuthService();
-    }
+    _authenticationProgress = _configurations.authenticationProgress;
     // end authentication
 
     if (_configurations.setPathUrlStrategy) {
@@ -113,12 +114,17 @@ class Routing {
       return null;
     },
     navigatorBuilder: (context, state, widget) {
-      if (notAuth) {
-        return NavigatorCS(child: _withoutAuthentication);
-      }
-
       if (notConnect) {
         return NavigatorCS(child: _withoutConnection);
+      }
+
+      if (authentication) {
+        return AuthenticationBuilder(
+          controller: _authentication!,
+          withoutAuthentication: _withoutAuthentication,
+          builder: widget,
+          authenticationProgress: _authenticationProgress,
+        );
       }
 
       return widget;
@@ -183,25 +189,55 @@ class Routing {
 
   late final StreamController<bool>? _authentication;
 
-  bool? _isAuth;
-
   late Widget _withoutAuthentication;
+
+  late Widget _authenticationProgress;
 
   late final bool _authManagement;
 
-  void _initAuthService() {
-    _authentication?.stream.listen((event) {
-      _isAuth = event;
-      refresh();
-    });
-  }
-
-  bool get notAuth {
-    return (_authManagement && _isAuth == false);
+  bool get authentication {
+    return (_authManagement && _authentication != null);
   }
 
   // auth service
 
+}
+
+class AuthenticationBuilder extends StatelessWidget {
+  const AuthenticationBuilder({
+    Key? key,
+    required this.controller,
+    required this.withoutAuthentication,
+    required this.builder,
+    required this.authenticationProgress,
+  }) : super(key: key);
+
+  final StreamController<bool> controller;
+  final Widget withoutAuthentication;
+  final Widget builder;
+  final Widget authenticationProgress;
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigatorCS(
+      child: StreamBuilder<bool>(
+        stream: controller.stream,
+        builder: (context, snapshot) {
+          return ResolveSnapshot<bool>(
+            snapshot: snapshot,
+            onData: (data) {
+              if (data) {
+                return builder;
+              }
+              return withoutAuthentication;
+            },
+            onError: withoutAuthentication,
+            loading: authenticationProgress,
+          );
+        },
+      ),
+    );
+  }
 }
 
 class NavigatorCS extends StatelessWidget {
@@ -276,6 +312,7 @@ class RoutingConfigurations {
   final bool authManagement;
   final Widget withoutAuthentication;
   final StreamController<bool>? authentication;
+  final Widget authenticationProgress;
 
   RoutingConfigurations({
     required this.initialPage,
@@ -288,5 +325,7 @@ class RoutingConfigurations {
     this.authManagement = false,
     this.withoutAuthentication = const WithoutAuthentication(),
     this.authentication,
+    this.authenticationProgress =
+        const Scaffold(backgroundColor: Colors.white, body: ProgressCS()),
   });
 }

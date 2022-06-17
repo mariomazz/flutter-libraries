@@ -13,18 +13,20 @@ dependencies:
     sdk: flutter
   go_router: ^3.1.1
   url_strategy: ^0.2.0
-  connectivity_service: 
-    git: 
+  connectivity_service:
+    git:
       url: https://github.com/mariomazz/flutter-libraries.git
       ref: develop
       path: connectivity_service
-
+  widgets:
+    git:
+      url: https://github.com/mariomazz/flutter-libraries.git
+      ref: develop
+      path: widgets
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
