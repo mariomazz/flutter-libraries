@@ -78,6 +78,8 @@ class Routing {
 
   RouteInformationProvider get routeProvider => _go.routeInformationProvider;
 
+  BuildContext? get key => _go.navigator?.context;
+
   // save browsing data
 
   Object? getExtra(String page) => _stackObj[page];
