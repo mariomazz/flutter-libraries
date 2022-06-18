@@ -76,6 +76,8 @@ class Routing {
 
   RouteInformationParser<Object> get parser => _go.routeInformationParser;
 
+  RouteInformationProvider get routeProvider => _go.routeInformationProvider;
+
   // save browsing data
 
   Object? getExtra(String page) => _stackObj[page];
