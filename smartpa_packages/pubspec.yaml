@@ -1,22 +1,46 @@
-name: widgets
+name: smartpa_packages
 description: A new Flutter package project.
 version: 0.0.1
 homepage:
+publish_to: none
 
 environment:
-  sdk: ">=2.17.1 <3.0.0"
+  sdk: ">=2.17.3 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  authentication:
+    git:
+      url: https://github.com/mariomazz/flutter-libraries.git
+      ref: develop
+      path: authentication
+  widgets:
+    git:
+      url: https://github.com/mariomazz/flutter-libraries.git
+      ref: develop
+      path: widgets
+  routing_gr:
+    git:
+      url: https://github.com/mariomazz/flutter-libraries.git
+      ref: develop
+      path: routing_gr
+  extension_methods:
+    git:
+      url: https://github.com/mariomazz/flutter-libraries.git
+      ref: develop
+      path: extension_methods
+  api_controller:
+    git:
+      url: https://github.com/mariomazz/flutter-libraries.git
+      ref: develop
+      path: api_controller
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
