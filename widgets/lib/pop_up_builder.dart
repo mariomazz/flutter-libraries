@@ -24,7 +24,7 @@ class PopUpBuilder {
 
   static void closeLoading(BuildContext context) {
     if (_loading) {
-      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 }
