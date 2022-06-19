@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_service/connectivity_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -78,16 +79,33 @@ class Routing {
 
   RouteInformationProvider get routeProvider => _go.routeInformationProvider;
 
-  BuildContext? get key => _go.navigator?.context;
+  BuildContext? get context => _go.navigator?.context;
 
   // save browsing data
 
   Object? getExtra(String page) => _stackObj[page];
 
-  final Map<String, Object?> _stackObj = {};
+  final Map<String, dynamic> _stackObj = {};
 
-  void _pushObj(Object? obj, String path) =>
-      obj != null ? _stackObj.addAll({path: obj}) : () {};
+  void _pushObj(Object? obj, String path) {
+    try {
+      if (obj != null) {
+        if (obj is Map<String, dynamic>) {
+          final extra = obj["extra"] as Object?;
+          final saveExtra = obj["saveExtra"] as bool;
+          final save = extra != null && saveExtra;
+
+          if (save) {
+            _stackObj.addAll({path: extra});
+          }
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("extra not saved");
+      }
+    }
+  }
 
   // end save browsing data
 
@@ -140,9 +158,15 @@ class Routing {
 
   // navigations
 
-  void go(String page, {Object? extra}) => _go.go(page, extra: extra);
+  void go(String page, {Object? extra, bool saveExtra = true}) => _go.go(
+        page,
+        extra: <String, dynamic>{"extra": extra, "saveExtra": saveExtra},
+      );
 
-  void push(String page, {Object? extra}) => _go.push(page, extra: extra);
+  void push(String page, {Object? extra, bool saveExtra = true}) => _go.push(
+        page,
+        extra: <String, dynamic>{"extra": extra, "saveExtra": saveExtra},
+      );
 
   void pop() => _go.pop();
 
