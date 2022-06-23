@@ -34,7 +34,7 @@ class ShowLoading extends StatelessWidget {
     return SizedBox.expand(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withOpacity(0.2),
         ),
         child: Center(
           child: progress,
