@@ -5,31 +5,41 @@ import 'package:flutter/material.dart';
 class ProgressCS extends StatelessWidget {
   const ProgressCS({
     Key? key,
-    this.color = Colors.blue,
+    this.color,
     this.center = true,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
   final bool center;
+
+  Color get _defaultColor =>
+      Platform.isIOS || Platform.isMacOS ? Colors.black : Colors.blue;
+
+  Color getColor() {
+    if (color != null) {
+      return color!;
+    }
+    return _defaultColor;
+  }
 
   @override
   Widget build(BuildContext context) {
     try {
       if (Platform.isIOS || Platform.isMacOS) {
         if (center) {
-          return Center(child: CupertinoActivityIndicator(color: color));
+          return Center(child: CupertinoActivityIndicator(color: getColor()));
         }
-        return CupertinoActivityIndicator(color: color);
+        return CupertinoActivityIndicator(color: getColor());
       }
     } catch (e) {
       if (center) {
-        return Center(child: CircularProgressIndicator(color: color));
+        return Center(child: CircularProgressIndicator(color: getColor()));
       }
-      return CircularProgressIndicator(color: color);
+      return CircularProgressIndicator(color: getColor());
     }
     if (center) {
-      return Center(child: CircularProgressIndicator(color: color));
+      return Center(child: CircularProgressIndicator(color: getColor()));
     }
-    return CircularProgressIndicator(color: color);
+    return CircularProgressIndicator(color: getColor());
   }
 }
