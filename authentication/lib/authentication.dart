@@ -7,7 +7,7 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthSession {
+class AuthSession with ChangeNotifier {
   AuthSession.init({required AuthConfigurations configurations}) {
     _instance = this;
     _configurations = configurations;
@@ -25,16 +25,26 @@ class AuthSession {
 
   late final AuthConfigurations _configurations;
 
-  final StreamController<bool> _authController = BehaviorSubject<bool>();
+  final StreamController<SessionData> _authController =
+      BehaviorSubject<SessionData>();
 
-  StreamController<bool> get controller => _authController;
+  Stream<bool> get isAuth =>
+      _authController.stream.map<bool>((event) => event.isAuth);
+
+  Stream<String?> get accessToken =>
+      _authController.stream.map<String?>((event) => event.accessToken);
+
+  String? get currentAccessToken => _authService.session?.accessToken;
+
+  bool? get currentIsAuth => _authService.session?.isAuth;
 
   late final _AuthService _authService =
       _AuthService(configurations: _configurations);
 
   void _init() {
     _authService.authStream.listen((session) {
-      _authController.add(session.isAuth);
+      _authController.add(session);
+      notifyListeners();
     });
   }
 
@@ -49,10 +59,6 @@ class AuthSession {
   Future<void> refreshSession() async {
     return await _authService.refreshSession();
   }
-
-  SessionData? get session => _authService.session;
-
-  String? get accessToken => _authService.session?.accessToken;
 }
 
 class _AuthService {
