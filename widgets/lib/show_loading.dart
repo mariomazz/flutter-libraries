@@ -8,12 +8,14 @@ class ShowLoading extends StatelessWidget {
     this.progress = const CircularProgressIndicator(),
     this.background = _color,
     this.opacity = 0.2,
+    this.expandContent = true,
   }) : super(key: key);
   final LoadingController controller;
   final Widget builder;
   final Widget progress;
   final Color background;
   final double opacity;
+  final bool expandContent;
   static const _color = Color(0xFFFFFFFF);
   @override
   Widget build(BuildContext context) {
@@ -35,16 +37,16 @@ class ShowLoading extends StatelessWidget {
   }
 
   Widget _loading() {
-    return SizedBox.expand(
-      child: Container(
-        decoration: BoxDecoration(
-          color: background.withOpacity(opacity),
-        ),
-        child: Center(
-          child: progress,
-        ),
+    final loading = Container(
+      decoration: BoxDecoration(
+        color: background.withOpacity(opacity),
+      ),
+      child: Center(
+        child: progress,
       ),
     );
+
+    return expandContent ? SizedBox.expand(child: loading) : loading;
   }
 }
 
