@@ -12,14 +12,15 @@ class ProgressCS extends StatelessWidget {
   final Color? color;
   final bool center;
 
-  Color get _defaultColor =>
-      Platform.isIOS || Platform.isMacOS ? Colors.black : Colors.blue;
-
   Color getColor() {
-    if (color != null) {
-      return color!;
+    try {
+      if (color != null) {
+        return color!;
+      }
+      return Platform.isIOS || Platform.isMacOS ? Colors.black : Colors.blue;
+    } catch (e) {
+      return Colors.blue;
     }
-    return _defaultColor;
   }
 
   @override
