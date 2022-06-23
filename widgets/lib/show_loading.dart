@@ -6,11 +6,15 @@ class ShowLoading extends StatelessWidget {
     required this.controller,
     required this.builder,
     this.progress = const CircularProgressIndicator(),
+    this.background = _color,
+    this.opacity = 0.2,
   }) : super(key: key);
   final LoadingController controller;
   final Widget builder;
   final Widget progress;
-
+  final Color background;
+  final double opacity;
+  static const _color = Color(0xFFFFFFFF);
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
@@ -34,7 +38,7 @@ class ShowLoading extends StatelessWidget {
     return SizedBox.expand(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: background.withOpacity(opacity),
         ),
         child: Center(
           child: progress,
