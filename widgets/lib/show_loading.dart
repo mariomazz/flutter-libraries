@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class ShowLoading extends StatelessWidget {
-  const ShowLoading({
+class PopUp extends StatelessWidget {
+  const PopUp({
     Key? key,
     required this.controller,
-    required this.builder,
-    this.progress = const CircularProgressIndicator(),
+    required this.child,
+    this.builder = const CircularProgressIndicator(),
     this.background = _color,
     this.opacity = 0.2,
     this.expandContent = true,
   }) : super(key: key);
   final LoadingController controller;
+  final Widget child;
   final Widget builder;
-  final Widget progress;
   final Color background;
   final double opacity;
   final bool expandContent;
@@ -25,7 +25,7 @@ class ShowLoading extends StatelessWidget {
         if (data) {
           return Stack(
             children: [
-              builder,
+              child,
               _loading(),
             ],
           );
@@ -42,7 +42,7 @@ class ShowLoading extends StatelessWidget {
         color: background.withOpacity(opacity),
       ),
       child: Center(
-        child: progress,
+        child: builder,
       ),
     );
 
