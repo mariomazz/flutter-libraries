@@ -10,7 +10,7 @@ class PopUp extends StatelessWidget {
     this.opacity = 0.2,
     this.expandContent = true,
   }) : super(key: key);
-  final LoadingController controller;
+  final PopUpController controller;
   final Widget child;
   final Widget builder;
   final Color background;
@@ -50,7 +50,7 @@ class PopUp extends StatelessWidget {
   }
 }
 
-class LoadingController {
+class PopUpController {
   final ValueNotifier<bool> _showLoading = ValueNotifier<bool>(false);
 
   ValueNotifier<bool> get showLoading => _showLoading;
