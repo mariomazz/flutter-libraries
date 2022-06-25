@@ -31,7 +31,7 @@ class PopUp extends StatelessWidget {
           );
         }
 
-        return builder;
+        return child;
       },
     );
   }
