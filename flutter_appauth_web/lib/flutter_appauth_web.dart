@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter_appauth_platform_interface/flutter_appauth_platform_interface.dart';
 import 'package:pointycastle/digests/sha256.dart';
+export 'package:flutter_appauth_platform_interface/flutter_appauth_platform_interface.dart';
 
 /// A Calculator.
 class AppAuthWebPlugin extends FlutterAppAuthPlatform {
