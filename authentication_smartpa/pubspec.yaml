@@ -15,11 +15,7 @@ dependencies:
   flutter_appauth: ^4.1.0+1
   jwt_decoder: ^2.0.1
   shared_preferences: ^2.0.15
-  asf_auth_web:
-    git:
-      url: https://github.com/asoftwarefactory/asf-auth-web.git
-      ref: develop
-      # path: asf_auth_web
+  
 
 dev_dependencies:
   flutter_test:
