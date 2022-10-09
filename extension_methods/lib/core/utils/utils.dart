@@ -16,3 +16,7 @@ class MultipleChangeNotifier extends ChangeNotifier {
     super.dispose();
   }
 }
+
+abstract class Setable {
+  int get key;
+}
