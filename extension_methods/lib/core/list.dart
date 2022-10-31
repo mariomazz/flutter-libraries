@@ -1,7 +1,19 @@
 import 'dart:math';
+import 'package:extension_methods/core/string.dart';
 import 'utils/utils.dart';
 
 extension ListExtension<T> on List<T> {
+  String createQueryParameters({
+    required String key,
+    bool questionMarker = true,
+  }) {
+    String value = questionMarker ? "?" : "";
+    for (var element in this) {
+      value += "$key=${element.toString()}&";
+    }
+    return value.removeLast(test: (e) => e.endsWith("&"));
+  }
+
   Map<K, List<T>> groupBy<K>(K Function(T data) key) {
     final map = <K, List<T>>{};
     for (var e in this) {
