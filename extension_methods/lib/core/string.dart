@@ -1,7 +1,9 @@
 extension ExtensionString on String {
   static final _startValues = Expando<String>();
   String get value => _startValues[this] ?? "";
-  set value(String x) => _startValues[this] = x;
+  set value(String x) {
+    _startValues[this] = x;
+  }
 
   String removeLast({bool Function(String)? test}) {
     if (test?.call(this) ?? _fn(this)) {
@@ -12,14 +14,14 @@ extension ExtensionString on String {
     return this;
   }
 
-  void removeLastAndSet({bool Function(String)? test}) {
+  /* void removeLastAndSet({bool Function(String)? test}) {
     if (test?.call(this) ?? _fn(this)) {
       List<String> c = split("");
       c.removeLast();
       value = c.join();
     }
     return;
-  }
+  } */
 
   bool equals(String other) {
     return this == other;
