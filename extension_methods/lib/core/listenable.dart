@@ -13,6 +13,10 @@ extension ListenableExtension on Listenable {
     return ctr.stream;
   }
 
-  static Listenable fromMulti(List<Stream> streams) =>
+  static Listenable fromMultiStream(List<Stream> streams) =>
       MultipleChangeNotifier(StreamExtension.withMulti(streams));
+
+  static Listenable fromMulti(List<Listenable> listenables) =>
+      MultipleChangeNotifier(StreamExtension.withMulti(
+          listenables.map((e) => e.toStream()).toList()));
 }
